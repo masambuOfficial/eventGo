@@ -2,10 +2,19 @@
 
 namespace App\Domain\Catalog\Models;
 
+use Database\Factories\DistrictFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class District extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): DistrictFactory
+    {
+        return DistrictFactory::new();
+    }
+
     public $timestamps = false;
 
     protected $fillable = [

@@ -11,7 +11,13 @@ use App\Livewire\Events\Wizard as EventWizard;
 use App\Livewire\Providers\Availability as ProviderAvailability;
 use App\Livewire\Providers\Media as ProviderMedia;
 use App\Livewire\Providers\Onboarding as ProviderOnboarding;
+use App\Livewire\Providers\Offers\Index as ProviderOfferIndex;
+use App\Livewire\Providers\Offers\Submit as ProviderOfferSubmit;
+use App\Livewire\Providers\Opportunities\Browse as ProviderOpportunityBrowse;
+use App\Livewire\Providers\Opportunities\Invitations as ProviderInvitations;
 use App\Livewire\Providers\RequestVerification;
+use App\Livewire\Sourcing\OfferComparison;
+use App\Livewire\Sourcing\OpportunityPanel;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +41,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/availability', ProviderAvailability::class)->name('availability.index');
         Route::get('/media', ProviderMedia::class)->name('media.index');
         Route::get('/verification', RequestVerification::class)->name('verification.create');
+        Route::get('/opportunities', ProviderOpportunityBrowse::class)->name('opportunities.index');
+        Route::get('/invitations', ProviderInvitations::class)->name('invitations.index');
+        Route::get('/offers', ProviderOfferIndex::class)->name('offers.index');
     });
 
     Route::prefix('events')->name('events.')->group(function () {
@@ -43,4 +52,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{event}/wizard', EventWizard::class)->name('wizard');
         Route::get('/{event}', EventDashboardController::class)->name('dashboard');
     });
+
+    Route::get('/requirements/{requirement}/sourcing', OpportunityPanel::class)->name('sourcing.show');
+    Route::get('/requirements/{requirement}/offers', OfferComparison::class)->name('sourcing.offers');
+    Route::get('/requirements/{requirement}/offers/submit', ProviderOfferSubmit::class)->name('offers.submit');
 });

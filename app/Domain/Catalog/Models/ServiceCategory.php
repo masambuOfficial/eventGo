@@ -2,12 +2,21 @@
 
 namespace App\Domain\Catalog\Models;
 
+use Database\Factories\ServiceCategoryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ServiceCategory extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): ServiceCategoryFactory
+    {
+        return ServiceCategoryFactory::new();
+    }
+
     protected $fillable = [
         'parent_id',
         'slug',

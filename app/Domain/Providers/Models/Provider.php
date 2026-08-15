@@ -4,6 +4,8 @@ namespace App\Domain\Providers\Models;
 
 use App\Domain\Catalog\Models\District;
 use App\Models\User;
+use Database\Factories\ProviderFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,6 +13,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Provider extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): ProviderFactory
+    {
+        return ProviderFactory::new();
+    }
+
     protected $fillable = [
         'business_name',
         'normalised_name',

@@ -103,7 +103,7 @@
                         @elseif ($question->input_type === 'multiselect')
                             <div class="space-y-1">
                                 @foreach ($question->options ?? [] as $option)
-                                    <label class="flex items-center gap-2 text-[14px] text-ink">
+                                    <label wire:key="q{{ $question->id }}-opt-{{ $loop->index }}" class="flex items-center gap-2 text-[14px] text-ink">
                                         <input type="checkbox" wire:model="answers.{{ $question->id }}" value="{{ $option }}"
                                                class="rounded-sm border-line">
                                         {{ $option }}
@@ -204,10 +204,10 @@
 
                 <div class="flex items-center gap-3">
                     <button type="button" wire:click="backTo(2)" class="text-[14px] text-slate hover:text-ink">Back</button>
-                    <button type="button" wire:click="commit" wire:loading.attr="disabled" wire:target="commit"
+                    <button type="button" wire:click="saveRequirements" wire:loading.attr="disabled" wire:target="saveRequirements"
                             class="flex-1 bg-green-600 hover:bg-green-700 text-white rounded-sm px-4 py-2 text-[14px] font-medium transition disabled:opacity-60">
-                        <span wire:loading.remove wire:target="commit">Save my requirements</span>
-                        <span wire:loading wire:target="commit">Saving…</span>
+                        <span wire:loading.remove wire:target="saveRequirements">Save my requirements</span>
+                        <span wire:loading wire:target="saveRequirements">Saving…</span>
                     </button>
                 </div>
             </div>

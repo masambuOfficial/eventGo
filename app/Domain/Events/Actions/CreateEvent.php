@@ -23,6 +23,7 @@ class CreateEvent
 
         $event->forceFill([
             'public_id' => (string) Str::ulid(),
+            'slug' => Event::generateSlug($data['name']),
             'owner_user_id' => $user->id,
         ]);
 

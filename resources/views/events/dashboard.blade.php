@@ -56,9 +56,10 @@
                     @if ($requirement->budget_estimate_ugx)
                         <span class="text-[14px] text-ink">UGX {{ number_format($requirement->budget_estimate_ugx) }}</span>
                     @endif
-                    <span class="text-[12px] font-medium px-2 py-0.5 rounded-full {{ $statusStyles[$requirement->status] ?? 'bg-surface text-slate' }}">
-                        {{ ucfirst(str_replace('_', ' ', $requirement->status)) }}
+                    <span class="text-[12px] font-medium px-2 py-0.5 rounded-full {{ $statusStyles[(string) $requirement->status] ?? 'bg-surface text-slate' }}">
+                        {{ ucfirst(str_replace('_', ' ', (string) $requirement->status)) }}
                     </span>
+                    <a href="{{ route('sourcing.show', $requirement) }}" class="text-[13px] text-green-600 hover:underline">Source</a>
                 </div>
             </div>
         @empty

@@ -90,6 +90,27 @@
                     <a href="{{ route('provider.availability.index') }}" class="text-green-600 hover:underline">Manage your calendar</a>
                 </p>
             </div>
+
+            <div class="bg-white border border-line rounded-lg p-6">
+                <h2 class="text-[18px] font-semibold text-ink mb-1">Opportunities</h2>
+                <p class="text-[14px] text-slate">
+                    <a href="{{ route('provider.opportunities.index') }}" class="text-green-600 hover:underline">Browse open requirements</a>
+                </p>
+            </div>
+
+            <div class="bg-white border border-line rounded-lg p-6">
+                <h2 class="text-[18px] font-semibold text-ink mb-1">Invitations</h2>
+                <p class="text-[14px] text-slate">
+                    <a href="{{ route('provider.invitations.index') }}" class="text-green-600 hover:underline">See who invited you directly</a>
+                </p>
+            </div>
+
+            <div class="bg-white border border-line rounded-lg p-6">
+                <h2 class="text-[18px] font-semibold text-ink mb-1">Your offers</h2>
+                <p class="text-[14px] text-slate">
+                    <a href="{{ route('provider.offers.index') }}" class="text-green-600 hover:underline">Track what you've submitted</a>
+                </p>
+            </div>
         </div>
     </div>
 </x-layouts.app>

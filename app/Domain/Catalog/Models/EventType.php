@@ -2,11 +2,20 @@
 
 namespace App\Domain\Catalog\Models;
 
+use Database\Factories\EventTypeFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EventType extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): EventTypeFactory
+    {
+        return EventTypeFactory::new();
+    }
+
     protected $fillable = [
         'slug',
         'name',

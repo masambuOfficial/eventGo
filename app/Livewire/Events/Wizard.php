@@ -59,6 +59,7 @@ class Wizard extends Component
         $this->guest_count_expected = $event->guest_count_expected;
 
         $this->loadAnswers($event);
+        $this->seedMultiselectDefaults();
     }
 
     protected function event(): ?Event
@@ -96,6 +97,23 @@ class Wizard extends Component
         }
     }
 
+    /**
+     * A group of checkboxes sharing one wire:model path only behaves as an
+     * array toggle if that path is already an array before the first
+     * render — left unset, Livewire collapses the whole group onto one
+     * shared scalar, so checking any option checks all of them. Multiselect
+     * answers must exist as `[]` before the form renders, not just once
+     * something is checked.
+     */
+    protected function seedMultiselectDefaults(): void
+    {
+        foreach ($this->questions() as $question) {
+            if ($question->input_type === 'multiselect' && ! isset($this->answers[$question->id])) {
+                $this->answers[$question->id] = [];
+            }
+        }
+    }
+
     public function saveBasics(CreateEvent $createEvent): void
     {
         $data = $this->validate([
@@ -119,6 +137,7 @@ class Wizard extends Component
         // Event type may have changed — drop answers that no longer belong to it.
         $this->answers = [];
         $this->loadAnswers($event);
+        $this->seedMultiselectDefaults();
 
         $this->step = 2;
     }
@@ -135,10 +154,14 @@ class Wizard extends Component
 
         $questions = $this->questions();
         $rules = [];
+        $messages = [];
+        $attributes = [];
 
         foreach ($questions as $question) {
             $rule = $question->is_required ? 'required' : 'nullable';
-            $rules["answers.{$question->id}"] = match ($question->input_type) {
+            $field = "answers.{$question->id}";
+
+            $rules[$field] = match ($question->input_type) {
                 'number' => [$rule, 'numeric'],
                 'bool' => [$rule],
                 'select' => [$rule, 'string'],
@@ -146,9 +169,18 @@ class Wizard extends Component
                 'date' => [$rule, 'date'],
                 default => [$rule, 'string'],
             };
+
+            $attributes[$field] = $question->label;
+
+            if ($question->input_type === 'multiselect') {
+                $messages["{$field}.required"] = "Select at least one option for \"{$question->label}\".";
+                $messages["{$field}.array"] = "Select at least one option for \"{$question->label}\".";
+            }
         }
 
-        $this->validate($rules);
+        if ($rules !== []) {
+            $this->validate($rules, $messages, $attributes);
+        }
 
         $answersToSave = [];
         foreach ($questions as $question) {
@@ -207,7 +239,7 @@ class Wizard extends Component
             ->sum(fn (array $line) => $line['budget_estimate_ugx'] ?? 0);
     }
 
-    public function commit(CommitRequirements $commitRequirements): void
+    public function saveRequirements(CommitRequirements $commitRequirements): void
     {
         $event = $this->event();
 

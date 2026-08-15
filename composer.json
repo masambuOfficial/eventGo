@@ -12,6 +12,7 @@
         "laravel/socialite": "^5.29",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^4.4",
+        "spatie/laravel-model-states": "^2.12",
         "spatie/laravel-permission": "^6.10",
         "symfony/expression-language": "^7.4"
     },
