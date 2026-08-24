@@ -8,8 +8,10 @@
 /*
  * Theme tokens are split in two layers:
  *   1. Runtime custom properties (--eg-*) below, swapped by [data-theme].
- *      Light is the default per product decision, :root carries light
- *      values; :root[data-theme="dark"] overrides them.
+ *      :root carries light values as the base token set; dark is now the
+ *      product default, applied via :root[data-theme="dark"] — see
+ *      theme-init-script.blade.php, which sets that attribute on first
+ *      paint unless a "light" cookie says the user opted out.
  *   2. The @theme block maps Tailwind's utility classes (bg-surface,
  *      text-ink, bg-green-600, ...) onto those runtime properties, so
  *      every existing bg-, text- and border- class already used across
