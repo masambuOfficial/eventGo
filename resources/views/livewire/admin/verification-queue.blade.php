@@ -4,7 +4,7 @@
     <h1 class="text-[24px] font-semibold text-ink mt-2 mb-6">Verification queue</h1>
 
     @forelse ($pending as $verification)
-        <div wire:key="verif-{{ $verification->id }}" class="bg-white border border-line rounded-lg p-6 mb-4">
+        <div wire:key="verif-{{ $verification->id }}" class="bg-surface-raised border border-line rounded-lg p-6 mb-4">
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-[16px] font-medium text-ink">{{ $verification->provider->business_name }}</p>

@@ -5,23 +5,139 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+/*
+ * Theme tokens are split in two layers:
+ *   1. Runtime custom properties (--eg-*) below, swapped by [data-theme].
+ *      Light is the default per product decision, :root carries light
+ *      values; :root[data-theme="dark"] overrides them.
+ *   2. The @theme block maps Tailwind's utility classes (bg-surface,
+ *      text-ink, bg-green-600, ...) onto those runtime properties, so
+ *      every existing bg-, text- and border- class already used across
+ *      the app becomes theme-aware for free — no per-file edits needed.
+ */
+:root {
+    --eg-surface: #FBFAF7;
+    --eg-surface-raised: #FFFFFF;
+    --eg-ink: #16211D;
+    --eg-slate: #55635D;
+    --eg-line: #D5DCD8;
+
+    --eg-green-50: #F0F8F5;
+    --eg-green-100: #D3EBE3;
+    --eg-green-400: #2E9C82;
+    --eg-green-600: #14705C;
+    --eg-green-700: #0F5A4B;
+    --eg-green-900: #08302A;
+
+    --eg-amber-100: #FAE9CE;
+    --eg-amber-500: #E0952F;
+    --eg-amber-700: #A8641A;
+
+    --eg-band-bg: #08302A;
+}
+
+:root[data-theme="dark"] {
+    --eg-surface: #0A1613;
+    --eg-surface-raised: #122019;
+    --eg-ink: #F2F5F3;
+    --eg-slate: #9FB0A8;
+    --eg-line: #22362F;
+
+    --eg-green-50: #12241F;
+    --eg-green-100: #163A31;
+    --eg-green-400: #35B294;
+    --eg-green-600: #2E9C82;
+    --eg-green-700: #3FB89A;
+    --eg-green-900: #08302A;
+
+    --eg-amber-100: #3A2C15;
+    --eg-amber-500: #E0952F;
+    --eg-amber-700: #F0AC4E;
+
+    /* A "raised" dark-green band distinct from both the page background
+       and flat green-900 — used by the marketing hero/CTA bands so they
+       read as an elevated surface even when the whole page is already
+       dark. In light mode this just collapses to green-900. */
+    --eg-band-bg: #12241F;
+}
+
 @theme {
-    --color-green-50: #F0F8F5;
-    --color-green-100: #D3EBE3;
-    --color-green-400: #2E9C82;
-    --color-green-600: #14705C;
-    --color-green-700: #0F5A4B;
-    --color-green-900: #08302A;
+    --color-green-50: var(--eg-green-50);
+    --color-green-100: var(--eg-green-100);
+    --color-green-400: var(--eg-green-400);
+    --color-green-600: var(--eg-green-600);
+    --color-green-700: var(--eg-green-700);
+    --color-green-900: var(--eg-green-900);
 
-    --color-amber-100: #FAE9CE;
-    --color-amber-500: #E0952F;
-    --color-amber-700: #A8641A;
+    --color-amber-100: var(--eg-amber-100);
+    --color-amber-500: var(--eg-amber-500);
+    --color-amber-700: var(--eg-amber-700);
 
-    --color-surface: #FBFAF7;
-    --color-line: #D5DCD8;
-    --color-slate: #55635D;
-    --color-ink: #16211D;
+    --color-surface: var(--eg-surface);
+    --color-surface-raised: var(--eg-surface-raised);
+    --color-line: var(--eg-line);
+    --color-slate: var(--eg-slate);
+    --color-ink: var(--eg-ink);
 
     --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/*
+ * Marketing site: bold & energetic treatment.
+ * Kept centralized here rather than inline per-page so the motion/texture
+ * rules are defined once and reused across the hero, CTA bands, and the
+ * scroll-reveal grid tiles.
+ */
+.mkt-band {
+    background: var(--eg-band-bg);
+}
+
+.mkt-mesh {
+    position: absolute;
+    inset: -10% -10% auto -10%;
+    height: 620px;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(420px 320px at 18% 28%, color-mix(in oklab, var(--color-amber-500) 32%, transparent), transparent 70%),
+        radial-gradient(460px 340px at 82% 12%, color-mix(in oklab, var(--color-green-400) 38%, transparent), transparent 70%);
+    filter: blur(6px);
+    animation: mkt-mesh-drift 20s ease-in-out infinite alternate;
+}
+
+.mkt-dotgrid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, .14) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(circle at 78% 30%, black, transparent 65%);
+    mask-image: radial-gradient(circle at 78% 30%, black, transparent 65%);
+    animation: mkt-dotgrid-drift 30s linear infinite;
+}
+
+@keyframes mkt-mesh-drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(-3%, 3%) scale(1.07); }
+}
+
+@keyframes mkt-dotgrid-drift {
+    to { background-position: 220px 130px; }
+}
+
+.mkt-reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .6s cubic-bezier(.16, .8, .32, 1), transform .6s cubic-bezier(.16, .8, .32, 1);
+}
+.mkt-reveal.mkt-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mkt-mesh, .mkt-dotgrid { animation: none; }
+    .mkt-reveal { opacity: 1; transform: none; transition: none; }
 }

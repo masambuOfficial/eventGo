@@ -3,7 +3,7 @@
     <p class="text-[14px] text-slate mb-6">Organisers who invited you directly.</p>
 
     @forelse ($invitations as $invitation)
-        <div wire:key="inv-{{ $invitation->id }}" x-data="{ open: false }" class="bg-white border border-line rounded-lg p-4 mb-3">
+        <div wire:key="inv-{{ $invitation->id }}" x-data="{ open: false }" class="bg-surface-raised border border-line rounded-lg p-4 mb-3">
             <button type="button" @click="open = ! open; $wire.view({{ $invitation->id }})" class="w-full text-left">
                 <div class="flex items-center justify-between">
                     <div>
@@ -40,7 +40,7 @@
             </div>
         </div>
     @empty
-        <div class="bg-white border border-line rounded-lg p-6 text-center">
+        <div class="bg-surface-raised border border-line rounded-lg p-6 text-center">
             <p class="text-[14px] text-slate">No invitations yet.</p>
         </div>
     @endforelse

@@ -142,7 +142,7 @@ class Wizard extends Component
         $this->step = 2;
     }
 
-    public function saveAnswers(SaveScopeAnswers $saveScopeAnswers): void
+    public function saveAnswers(SaveScopeAnswers $saveScopeAnswers, GenerateRequirements $generateRequirements): void
     {
         $event = $this->event();
 
@@ -199,7 +199,7 @@ class Wizard extends Component
 
         $saveScopeAnswers($event, $answersToSave);
 
-        $this->lines = (new GenerateRequirements)($event)->toArray();
+        $this->lines = $generateRequirements($event)->toArray();
 
         $this->step = 3;
     }

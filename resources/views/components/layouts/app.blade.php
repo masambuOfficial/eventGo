@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <x-theme-init-script />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? config('app.name', 'Event Go') }}</title>
@@ -9,18 +10,21 @@
     @livewireStyles
 </head>
 <body class="bg-surface text-ink font-sans antialiased min-h-screen">
-    <nav class="border-b border-line bg-white">
+    <nav class="border-b border-line bg-surface-raised">
         <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-            <a href="{{ url('/home') }}" class="text-[16px] font-semibold text-ink">
-                event<span class="text-green-600">GO</span>
+            <a href="{{ url('/home') }}">
+                <x-logo class="h-7 w-auto" />
             </a>
 
             <div class="flex items-center gap-4 text-[14px]">
                 @auth
-                    @role('admin')
-                        <a href="{{ route('admin.dashboard') }}" class="text-slate hover:text-ink">Admin</a>
-                    @endrole
+                    <livewire:notifications.bell />
                     <span class="text-slate">{{ auth()->user()->full_name }}</span>
+                    <a href="{{ route('settings.security') }}" title="Security" aria-label="Security" class="text-slate hover:text-ink">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                    </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" title="Log out" aria-label="Log out" class="text-slate hover:text-ink">
@@ -32,6 +36,7 @@
                         </button>
                     </form>
                 @endauth
+                <x-theme-toggle />
             </div>
         </div>
     </nav>

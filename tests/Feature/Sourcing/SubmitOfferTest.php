@@ -3,6 +3,7 @@
 namespace Tests\Feature\Sourcing;
 
 use App\Domain\Attribution\Models\ProviderLead;
+use App\Domain\Billing\Entitlements;
 use App\Domain\Catalog\Models\EventType;
 use App\Domain\Catalog\Models\ServiceCategory;
 use App\Domain\Events\Models\Event;
@@ -31,7 +32,7 @@ class SubmitOfferTest extends TestCase
         ]);
         $provider = Provider::factory()->create();
 
-        $offer = (new SubmitOffer)($requirement, $provider, $provider->owner, [
+        $offer = (new SubmitOffer(new Entitlements))($requirement, $provider, $provider->owner, [
             'total_ugx' => 5_000_000,
             'terms' => '50% deposit required.',
             'items' => [
@@ -61,7 +62,7 @@ class SubmitOfferTest extends TestCase
         $requirement = Requirement::factory()->create(['event_id' => $event->id, 'service_category_id' => ServiceCategory::factory(), 'status' => 'sourcing']);
         $provider = Provider::factory()->create();
 
-        $action = new SubmitOffer;
+        $action = new SubmitOffer(new Entitlements);
 
         // Not exercising an explicit draft-save step here since SubmitOffer
         // always submits on first call — this covers editing before review

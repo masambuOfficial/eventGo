@@ -69,15 +69,17 @@ app is further along. What exists:
 - `database/migrations/` — `db/01-schema.sql` has been converted, one migration
   per domain area (identity, catalog, providers, events, sourcing, bookings,
   attribution, billing, messaging, reputation, notifications) plus a final
-  deferred-foreign-keys migration. Not yet run against a live database in this
-  checkout — verify before assuming the schema is applied.
+  deferred-foreign-keys migration, and is applied against the local `eventgo`/
+  `eventgo_test` databases.
 - `database/seeders/` — districts, event types, service categories, plans,
-  scope questions, requirement templates. Mirrors `db/02-seed-reference.sql`.
+  scope questions, requirement templates, roles. Mirrors
+  `db/02-seed-reference.sql`.
 - `.env` — configured for local MariaDB via XAMPP, database `eventgo`.
-
-What's still missing from Phase 0: this is otherwise a bare `laravel/laravel`
-skeleton — no Livewire, no Socialite, no auth, no roles, no admin shell, and no
-`app/Domain/*` module structure yet (only default `Http/Models/Providers`).
+- `app/Domain/{Identity,Catalog,Providers,Events,Sourcing,Bookings,Messaging,
+  Reputation,Attribution,Notifications}` — built out through Phase 4 (see
+  Build order below). `Billing` and `Trust` don't exist yet — that's Phase 5.
+- Livewire 3, Socialite (Google), roles (spatie/laravel-permission), and an
+  admin shell all exist.
 
 ---
 
@@ -153,8 +155,29 @@ are still visible. That set is the leakage measure.
 | 5 | Attribution, provider ROI dashboard, plans and entitlements, prepaid billing, featured placement |
 | 6 | PDPO compliance, security review, data-saver mode, pilot hardening |
 
-Currently mid **Phase 0**: scaffold, migrations, and reference seeders exist;
-auth (email + Google), roles, and the admin shell do not yet.
+Phases 0–5 are functionally complete: auth, roles, admin shell, provider
+onboarding, the event wizard and requirements engine, sourcing through
+accept → booking, the booking workspace (tasks, files, amendments,
+messaging, two-way reviews, in-app notifications), and revenue (a
+`Billing` domain with plans/subscriptions/entitlements enforced on offer
+submission, capped `plan_boost`/`featured_multiplier` ranking terms, a
+provider ROI dashboard, and staff-activated prepaid billing over mobile
+money — no real PSP integration, per architecture §16's own timeline for
+that). Provider `response_rate`/`median_response_minutes`/`bookings_won`
+are now aggregated nightly from `provider_leads` rather than sitting dead.
+Organiser-premium plans and real PSP/SMS delivery remain unbuilt by design
+(architecture sequences them later / requires infra this project doesn't
+have yet). The admin console (architecture line 75's full scope —
+verification queue, taxonomy, user management, reports) is also complete:
+`event_types`/`service_categories`/`districts`/`scope_questions`/
+`requirement_templates` are editable in-app rather than requiring a
+seeder-and-redeploy; `requirement_templates`' expressions are validated by
+actually evaluating them before save; user management can grant/revoke
+admin access and suspend accounts (enforced at Fortify's
+`authenticateUsing`, so a suspended user cannot start a new session); and a
+reports page covers liquidity, operational health, and raw funnel counts,
+with revenue metrics gated behind a minimum-data floor rather than showing
+misleading near-zero numbers. Phase 6 has not started.
 
 ---
 

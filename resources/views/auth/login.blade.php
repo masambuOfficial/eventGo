@@ -23,21 +23,14 @@
 
         <div>
             <label for="email" class="block text-[14px] font-medium text-ink mb-1">Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
                    class="w-full border border-line rounded-sm px-3 py-2 text-[16px] text-ink focus:outline-none focus:ring-2 focus:ring-green-600">
             @error('email')
                 <p class="mt-1 text-[13px] text-amber-700">{{ $message }}</p>
             @enderror
         </div>
 
-        <div>
-            <label for="password" class="block text-[14px] font-medium text-ink mb-1">Password</label>
-            <input id="password" type="password" name="password" required
-                   class="w-full border border-line rounded-sm px-3 py-2 text-[16px] text-ink focus:outline-none focus:ring-2 focus:ring-green-600">
-            @error('password')
-                <p class="mt-1 text-[13px] text-amber-700">{{ $message }}</p>
-            @enderror
-        </div>
+        <x-password-field autocomplete="current-password" />
 
         <div class="flex items-center justify-between">
             <label class="flex items-center gap-2 text-[13px] text-slate">

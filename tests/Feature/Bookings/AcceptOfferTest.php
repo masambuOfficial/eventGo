@@ -4,6 +4,7 @@ namespace Tests\Feature\Bookings;
 
 use App\Domain\Attribution\Models\Connection;
 use App\Domain\Attribution\Models\ProviderLead;
+use App\Domain\Billing\Entitlements;
 use App\Domain\Bookings\Actions\AcceptOffer;
 use App\Domain\Bookings\States\BookingState\Confirmed;
 use App\Domain\Catalog\Models\District;
@@ -55,7 +56,7 @@ class AcceptOfferTest extends TestCase
 
         (new PublishOpportunity(app(\App\Domain\Sourcing\Actions\MatchProvidersToRequirement::class), app(\App\Domain\Attribution\Actions\RecordProviderLead::class)))($requirement);
 
-        $submitOffer = new SubmitOffer;
+        $submitOffer = new SubmitOffer(new Entitlements);
         $winningOffer = $submitOffer($requirement->fresh(), $winner, $winner->owner, [
             'total_ugx' => 4_000_000,
             'items' => [['description' => 'Service', 'quantity' => 1, 'unit_price_ugx' => 4_000_000]],
@@ -99,6 +100,13 @@ class AcceptOfferTest extends TestCase
             ->first();
         $this->assertNotNull($availability);
         $this->assertSame(1, $availability->capacity_used);
+
+        $this->assertGreaterThan(0, $booking->tasks()->count());
+
+        $thread = \App\Domain\Messaging\Models\Thread::where('subject_type', 'booking')->where('subject_id', $booking->id)->first();
+        $this->assertNotNull($thread);
+        $this->assertTrue($thread->participants->pluck('id')->contains($organiser->id));
+        $this->assertTrue($thread->participants->pluck('id')->contains($winner->owner->id));
     }
 
     public function test_accepting_requires_the_offer_to_be_shortlisted_first(): void

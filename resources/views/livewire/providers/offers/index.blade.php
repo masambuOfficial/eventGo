@@ -12,7 +12,7 @@
     @endphp
 
     @forelse ($offers as $offer)
-        <div class="bg-white border border-line rounded-lg p-4 mb-3 flex items-center justify-between">
+        <div class="bg-surface-raised border border-line rounded-lg p-4 mb-3 flex items-center justify-between">
             <div>
                 <p class="text-[14px] font-medium text-ink">{{ $offer->requirement->title }}</p>
                 <p class="text-[13px] text-slate">
@@ -30,7 +30,7 @@
             </div>
         </div>
     @empty
-        <div class="bg-white border border-line rounded-lg p-6 text-center">
+        <div class="bg-surface-raised border border-line rounded-lg p-6 text-center">
             <p class="text-[14px] text-slate">You haven't submitted any offers yet.</p>
         </div>
     @endforelse

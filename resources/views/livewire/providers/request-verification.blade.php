@@ -8,13 +8,13 @@
     </p>
 
     @if ($submitted)
-        <div class="bg-white border border-line rounded-lg p-6">
+        <div class="bg-surface-raised border border-line rounded-lg p-6">
             <p class="text-[14px] text-ink">
                 Thanks — we've received your page details and will review them shortly.
             </p>
         </div>
     @else
-        <form wire:submit="submit" class="bg-white border border-line rounded-lg p-6 space-y-4">
+        <form wire:submit="submit" class="bg-surface-raised border border-line rounded-lg p-6 space-y-4">
             <div>
                 <label class="block text-[14px] font-medium text-ink mb-1">Platform</label>
                 <select wire:model="platform"

@@ -10,7 +10,7 @@
 
         @forelse ($events as $event)
             <a href="{{ route('events.dashboard', $event) }}"
-               class="block bg-white border border-line rounded-lg p-6 mb-4 hover:border-green-600 transition">
+               class="block bg-surface-raised border border-line rounded-lg p-6 mb-4 hover:border-green-600 transition">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[16px] font-medium text-ink">{{ $event->name }}</p>
@@ -25,7 +25,7 @@
                 </div>
             </a>
         @empty
-            <div class="bg-white border border-line rounded-lg p-6 text-center">
+            <div class="bg-surface-raised border border-line rounded-lg p-6 text-center">
                 <p class="text-[14px] text-slate mb-3">No events yet.</p>
                 <a href="{{ route('events.create') }}" class="text-[14px] text-green-600 hover:underline">Plan your first event</a>
             </div>

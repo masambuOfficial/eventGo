@@ -15,7 +15,7 @@
             @endif
         </div>
 
-        <div class="bg-white border border-line rounded-lg p-6 mb-4">
+        <div class="bg-surface-raised border border-line rounded-lg p-6 mb-4">
             <div class="flex items-center justify-between mb-2">
                 <p class="text-[14px] font-medium text-ink">Profile completeness</p>
                 <p class="text-[14px] text-slate">{{ $provider->profile_completeness }}%</p>
@@ -29,7 +29,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-3">Services</h2>
                 @forelse ($provider->services as $service)
                     <div class="flex items-center justify-between py-2 border-b border-line last:border-0">
@@ -46,7 +46,7 @@
                 @endforelse
             </div>
 
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-3">Areas served</h2>
                 @if ($provider->serviceAreas->isNotEmpty())
                     <p class="text-[14px] text-ink">{{ $provider->serviceAreas->pluck('name')->join(', ') }}</p>
@@ -55,7 +55,7 @@
                 @endif
             </div>
 
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-1">Get verified</h2>
                 <p class="text-[14px] text-slate mb-3">
                     Link your Facebook, Instagram or TikTok business page for a free Profile Verified badge.
@@ -76,7 +76,7 @@
                 @endif
             </div>
 
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-1">Portfolio</h2>
                 <p class="text-[14px] text-slate">
                     {{ $provider->media->count() }} photo(s) uploaded.
@@ -84,31 +84,45 @@
                 </p>
             </div>
 
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-1">Availability</h2>
                 <p class="text-[14px] text-slate">
                     <a href="{{ route('provider.availability.index') }}" class="text-green-600 hover:underline">Manage your calendar</a>
                 </p>
             </div>
 
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-1">Opportunities</h2>
                 <p class="text-[14px] text-slate">
                     <a href="{{ route('provider.opportunities.index') }}" class="text-green-600 hover:underline">Browse open requirements</a>
                 </p>
             </div>
 
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-1">Invitations</h2>
                 <p class="text-[14px] text-slate">
                     <a href="{{ route('provider.invitations.index') }}" class="text-green-600 hover:underline">See who invited you directly</a>
                 </p>
             </div>
 
-            <div class="bg-white border border-line rounded-lg p-6">
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
                 <h2 class="text-[18px] font-semibold text-ink mb-1">Your offers</h2>
                 <p class="text-[14px] text-slate">
                     <a href="{{ route('provider.offers.index') }}" class="text-green-600 hover:underline">Track what you've submitted</a>
+                </p>
+            </div>
+
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
+                <h2 class="text-[18px] font-semibold text-ink mb-1">Your ROI</h2>
+                <p class="text-[14px] text-slate">
+                    <a href="{{ route('provider.roi.index') }}" class="text-green-600 hover:underline">See what Event Go is doing for you</a>
+                </p>
+            </div>
+
+            <div class="bg-surface-raised border border-line rounded-lg p-6">
+                <h2 class="text-[18px] font-semibold text-ink mb-1">Billing</h2>
+                <p class="text-[14px] text-slate">
+                    <a href="{{ route('provider.billing.index') }}" class="text-green-600 hover:underline">Manage your plan</a>
                 </p>
             </div>
         </div>

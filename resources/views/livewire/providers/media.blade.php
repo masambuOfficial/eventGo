@@ -4,7 +4,7 @@
     <h1 class="text-[24px] font-semibold text-ink mt-2 mb-1">Portfolio</h1>
     <p class="text-[14px] text-slate mb-6">Photos of your past work. Organisers see these on your profile.</p>
 
-    <form wire:submit="save" class="bg-white border border-line rounded-lg p-6 mb-6 space-y-4">
+    <form wire:submit="save" class="bg-surface-raised border border-line rounded-lg p-6 mb-6 space-y-4">
         <div>
             <label class="block text-[14px] font-medium text-ink mb-1">Photo</label>
             <input type="file" wire:model="upload" accept="image/*"
@@ -33,9 +33,9 @@
     <div class="grid grid-cols-3 gap-3">
         @forelse ($items as $item)
             <div wire:key="media-{{ $item->id }}" class="relative">
-                <img src="{{ Storage::disk('public')->url($item->path) }}" class="w-full h-28 object-cover rounded-sm border border-line">
+                <img src="{{ Storage::disk(config('filesystems.default'))->url($item->path) }}" class="w-full h-28 object-cover rounded-sm border border-line">
                 <button wire:click="remove({{ $item->id }})" wire:confirm="Remove this photo?"
-                        class="absolute top-1 right-1 bg-white/90 text-[12px] text-amber-700 rounded-sm px-2 py-0.5">
+                        class="absolute top-1 right-1 bg-surface-raised/90 text-[12px] text-amber-700 rounded-sm px-2 py-0.5">
                     Remove
                 </button>
             </div>

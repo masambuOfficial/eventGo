@@ -10,7 +10,7 @@
         </div>
     @endif
 
-    <form wire:submit="submit" class="bg-white border border-line rounded-lg p-6 space-y-6">
+    <form wire:submit="submit" class="bg-surface-raised border border-line rounded-lg p-6 space-y-6">
         <div>
             <h2 class="text-[16px] font-semibold text-ink mb-3">Line items</h2>
 
@@ -97,7 +97,7 @@
         </button>
     </form>
 
-    <div class="bg-white border border-line rounded-lg p-6 mt-6">
+    <div class="bg-surface-raised border border-line rounded-lg p-6 mt-6">
         <h2 class="text-[16px] font-semibold text-ink mb-4">Questions &amp; answers</h2>
 
         @forelse ($clarifications as $clarification)

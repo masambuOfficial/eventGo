@@ -4,7 +4,7 @@
     <h1 class="text-[24px] font-semibold text-ink mt-2 mb-6">Compare offers</h1>
 
     @forelse ($offers as $offer)
-        <div wire:key="offer-{{ $offer->id }}" x-data="{ open: false }" class="bg-white border border-line rounded-lg p-5 mb-4">
+        <div wire:key="offer-{{ $offer->id }}" x-data="{ open: false }" class="bg-surface-raised border border-line rounded-lg p-5 mb-4">
             <button type="button" @click="open = ! open" class="w-full text-left">
                 <div class="flex items-start justify-between">
                     <div>
@@ -86,13 +86,13 @@
             </div>
         </div>
     @empty
-        <div class="bg-white border border-line rounded-lg p-6 text-center">
+        <div class="bg-surface-raised border border-line rounded-lg p-6 text-center">
             <p class="text-[14px] text-slate">No offers submitted yet.</p>
         </div>
     @endforelse
 
     @if ($clarifications->isNotEmpty())
-        <div class="bg-white border border-line rounded-lg p-6 mt-6">
+        <div class="bg-surface-raised border border-line rounded-lg p-6 mt-6">
             <h2 class="text-[16px] font-semibold text-ink mb-4">Questions from providers</h2>
 
             @foreach ($clarifications as $clarification)

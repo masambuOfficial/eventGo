@@ -125,16 +125,22 @@ class Submit extends Component
 
         $provider = Provider::findOrFail($this->providerId);
 
-        $offer = $submitOffer($this->requirement(), $provider, auth()->user(), [
-            'total_ugx' => (int) round($this->totalUgx()),
-            'scope_summary' => $this->scopeSummary ?: null,
-            'inclusions' => $this->inclusions ?: null,
-            'exclusions' => $this->exclusions ?: null,
-            'terms' => $this->terms ?: null,
-            'valid_until' => $this->validUntil ?: null,
-            'availability_confirmed' => $this->availabilityConfirmed,
-            'items' => $this->items,
-        ]);
+        try {
+            $offer = $submitOffer($this->requirement(), $provider, auth()->user(), [
+                'total_ugx' => (int) round($this->totalUgx()),
+                'scope_summary' => $this->scopeSummary ?: null,
+                'inclusions' => $this->inclusions ?: null,
+                'exclusions' => $this->exclusions ?: null,
+                'terms' => $this->terms ?: null,
+                'valid_until' => $this->validUntil ?: null,
+                'availability_confirmed' => $this->availabilityConfirmed,
+                'items' => $this->items,
+            ]);
+        } catch (\RuntimeException $e) {
+            $this->addError('items', $e->getMessage());
+
+            return;
+        }
 
         $this->submittedStatus = (string) $offer->fresh()->status;
     }

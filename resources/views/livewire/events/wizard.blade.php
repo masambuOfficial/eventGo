@@ -11,7 +11,7 @@
         @endforeach
     </div>
 
-    <div class="bg-white border border-line rounded-lg p-6">
+    <div class="bg-surface-raised border border-line rounded-lg p-6">
         @if ($step === 1)
             <form wire:submit="saveBasics" class="space-y-4">
                 <div>

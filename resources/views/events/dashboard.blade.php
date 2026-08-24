@@ -16,7 +16,7 @@
             </a>
         </div>
 
-        <div class="bg-white border border-line rounded-lg p-6 mb-6">
+        <div class="bg-surface-raised border border-line rounded-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-2">
                 <p class="text-[14px] font-medium text-ink">Planning progress</p>
                 <p class="text-[14px] text-slate">{{ $event->planning_progress }}%</p>
@@ -44,7 +44,7 @@
         @endphp
 
         @forelse ($event->requirements as $requirement)
-            <div class="bg-white border border-line rounded-lg p-4 mb-3 flex items-center justify-between">
+            <div class="bg-surface-raised border border-line rounded-lg p-4 mb-3 flex items-center justify-between">
                 <div>
                     <p class="text-[14px] font-medium text-ink">{{ $requirement->title }}</p>
                     <p class="text-[13px] text-slate">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         @empty
-            <div class="bg-white border border-line rounded-lg p-6 text-center">
+            <div class="bg-surface-raised border border-line rounded-lg p-6 text-center">
                 <p class="text-[14px] text-slate mb-3">No requirements yet.</p>
                 <a href="{{ route('events.wizard', $event) }}" class="text-[14px] text-green-600 hover:underline">Build your requirements list</a>
             </div>

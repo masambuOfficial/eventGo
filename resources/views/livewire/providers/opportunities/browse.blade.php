@@ -3,7 +3,7 @@
     <p class="text-[14px] text-slate mb-6">Open requirements matching your services and areas.</p>
 
     @forelse ($opportunities as $opportunity)
-        <div wire:key="opp-{{ $opportunity->id }}" x-data="{ open: false }" class="bg-white border border-line rounded-lg p-4 mb-3">
+        <div wire:key="opp-{{ $opportunity->id }}" x-data="{ open: false }" class="bg-surface-raised border border-line rounded-lg p-4 mb-3">
             <button type="button" @click="open = ! open; $wire.view({{ $opportunity->id }})" class="w-full text-left">
                 <div class="flex items-center justify-between">
                     <div>
@@ -32,7 +32,7 @@
             </div>
         </div>
     @empty
-        <div class="bg-white border border-line rounded-lg p-6 text-center">
+        <div class="bg-surface-raised border border-line rounded-lg p-6 text-center">
             <p class="text-[14px] text-slate">No open opportunities match your services and areas right now.</p>
         </div>
     @endforelse

@@ -10,9 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
  * Dispatched by Bookings\AcceptOffer once the booking exists. Listeners
  * handle everything that doesn't need to be atomic with the acceptance
  * itself — architecture §9.2: reserve availability, release contacts,
- * update attribution. Task-seeding and thread-opening are Phase 4 and
- * deliberately have no listener here yet; add them against this same
- * event rather than touching AcceptOffer again.
+ * update attribution, seed workspace tasks, open the thread.
  */
 class OfferAccepted
 {

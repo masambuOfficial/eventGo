@@ -55,7 +55,7 @@ class Media extends Component
 
         $provider = $this->provider();
 
-        $path = $this->upload->store("provider-media/{$provider->id}", 'public');
+        $path = $this->upload->store("provider-media/{$provider->id}", config('filesystems.default'));
 
         ProviderMedia::create([
             'provider_id' => $provider->id,
@@ -76,7 +76,7 @@ class Media extends Component
         $media = $provider->media()->where('id', $id)->first();
 
         if ($media) {
-            Storage::disk('public')->delete($media->path);
+            Storage::disk(config('filesystems.default'))->delete($media->path);
             $media->delete();
             $computeCompleteness($provider);
         }

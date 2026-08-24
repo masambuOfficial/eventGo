@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Bare in-app record only — no channel delivery yet. Phase 4 adds
- * notification_deliveries (email/SMS/push) and a proper Notifications
- * domain module; this model just lets Sourcing/Bookings/Attribution write
- * a row the recipient can see in their inbox.
+ * The recipient's inbox row. Delivery tracking (channel, status, timing)
+ * lives on the paired `NotificationDelivery` — write both together via
+ * `App\Domain\Notifications\Actions\NotifyUser` rather than creating this
+ * model directly, except for Phase 3 call sites that predate that action.
  */
 class Notification extends Model
 {

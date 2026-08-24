@@ -14,7 +14,7 @@
         </a>
     </div>
 
-    <div class="bg-white border border-line rounded-lg p-6 mb-6">
+    <div class="bg-surface-raised border border-line rounded-lg p-6 mb-6">
         <h2 class="text-[16px] font-semibold text-ink mb-4">Publish as an open opportunity</h2>
 
         @if ($opportunity && $opportunity->status === 'open')
@@ -66,7 +66,7 @@
         @endif
     </div>
 
-    <div class="bg-white border border-line rounded-lg p-6 mb-6">
+    <div class="bg-surface-raised border border-line rounded-lg p-6 mb-6">
         <h2 class="text-[16px] font-semibold text-ink mb-4">Invite providers directly</h2>
 
         <textarea wire:model="inviteMessage" rows="2" placeholder="Optional note to include with the invitation…"
@@ -75,7 +75,12 @@
         @forelse ($candidates as $match)
             <div wire:key="candidate-{{ $match['provider']->id }}" class="flex items-center justify-between border-t border-line py-3 first:border-t-0">
                 <div>
-                    <p class="text-[14px] font-medium text-ink">{{ $match['provider']->business_name }}</p>
+                    <p class="text-[14px] font-medium text-ink">
+                        {{ $match['provider']->business_name }}
+                        @if ($match['is_featured'])
+                            <span class="text-[11px] font-medium text-amber-700 bg-amber-100 rounded-full px-2 py-0.5 ml-1">Sponsored</span>
+                        @endif
+                    </p>
                     <p class="text-[13px] text-slate">Match score {{ number_format($match['score'] * 100, 0) }}%</p>
                 </div>
                 <button type="button" wire:click="invite({{ $match['provider']->id }})"
@@ -90,7 +95,7 @@
     </div>
 
     @if ($invitations->isNotEmpty())
-        <div class="bg-white border border-line rounded-lg p-6">
+        <div class="bg-surface-raised border border-line rounded-lg p-6">
             <h2 class="text-[16px] font-semibold text-ink mb-4">Invitations sent</h2>
 
             @foreach ($invitations as $invitation)

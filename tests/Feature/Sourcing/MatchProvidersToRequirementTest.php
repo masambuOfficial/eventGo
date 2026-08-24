@@ -2,6 +2,9 @@
 
 namespace Tests\Feature\Sourcing;
 
+use App\Domain\Billing\Entitlements;
+use App\Domain\Billing\Models\FeaturedPlacement;
+use App\Domain\Billing\Models\Plan;
 use App\Domain\Catalog\Models\District;
 use App\Domain\Catalog\Models\EventType;
 use App\Domain\Catalog\Models\ServiceCategory;
@@ -51,7 +54,7 @@ class MatchProvidersToRequirementTest extends TestCase
         $wrongCategory->services()->create(['service_category_id' => $photography->id]);
         $wrongCategory->serviceAreas()->attach($kampala->id);
 
-        $matches = (new MatchProvidersToRequirement)($requirement);
+        $matches = (new MatchProvidersToRequirement(new Entitlements))($requirement);
 
         $this->assertCount(1, $matches);
         $this->assertTrue($matches->first()['provider']->is($inCategoryAndDistrict));
@@ -83,7 +86,7 @@ class MatchProvidersToRequirementTest extends TestCase
         $weak->services()->create(['service_category_id' => $category->id]);
         $weak->serviceAreas()->attach($district->id);
 
-        $matches = (new MatchProvidersToRequirement)($requirement);
+        $matches = (new MatchProvidersToRequirement(new Entitlements))($requirement);
 
         $this->assertCount(2, $matches);
         $this->assertTrue($matches->first()['provider']->is($strong));
@@ -112,11 +115,68 @@ class MatchProvidersToRequirementTest extends TestCase
         ]);
         $tooSmall->serviceAreas()->attach($district->id);
 
-        $matches = (new MatchProvidersToRequirement)($requirement)->keyBy(fn ($row) => $row['provider']->id);
+        $matches = (new MatchProvidersToRequirement(new Entitlements))($requirement)->keyBy(fn ($row) => $row['provider']->id);
 
         $this->assertGreaterThan(
             $matches[$tooSmall->id]['score'],
             $matches[$fits->id]['score'],
         );
+    }
+
+    public function test_plan_boost_applies_and_is_capped(): void
+    {
+        $district = District::factory()->create();
+        $category = ServiceCategory::factory()->create();
+        $requirement = $this->requirementIn($district, $category);
+
+        $plan = Plan::factory()->create(['entitlements' => ['search_boost' => 5.0]]);
+
+        $boosted = Provider::factory()->create(['plan_id' => $plan->id, 'plan_expires_at' => now()->addMonth()]);
+        $boosted->services()->create(['service_category_id' => $category->id]);
+        $boosted->serviceAreas()->attach($district->id);
+
+        $unboosted = Provider::factory()->create();
+        $unboosted->services()->create(['service_category_id' => $category->id]);
+        $unboosted->serviceAreas()->attach($district->id);
+
+        $matches = (new MatchProvidersToRequirement(new Entitlements))($requirement)->keyBy(fn ($row) => $row['provider']->id);
+
+        $this->assertEqualsWithDelta(
+            $matches[$unboosted->id]['score'] * config('ranking.plan_boost_cap'),
+            $matches[$boosted->id]['score'],
+            0.0001,
+        );
+    }
+
+    public function test_featured_multiplier_applies_only_when_it_covers_the_requirement(): void
+    {
+        $district = District::factory()->create();
+        $otherDistrict = District::factory()->create();
+        $category = ServiceCategory::factory()->create();
+        $requirement = $this->requirementIn($district, $category);
+
+        $featured = Provider::factory()->create(['featured_until' => now()->addMonth()]);
+        $featured->services()->create(['service_category_id' => $category->id]);
+        $featured->serviceAreas()->attach($district->id);
+        FeaturedPlacement::factory()->create([
+            'provider_id' => $featured->id,
+            'service_category_id' => $category->id,
+            'district_id' => $district->id,
+        ]);
+
+        $featuredElsewhere = Provider::factory()->create(['featured_until' => now()->addMonth()]);
+        $featuredElsewhere->services()->create(['service_category_id' => $category->id]);
+        $featuredElsewhere->serviceAreas()->attach($district->id);
+        FeaturedPlacement::factory()->create([
+            'provider_id' => $featuredElsewhere->id,
+            'service_category_id' => $category->id,
+            'district_id' => $otherDistrict->id,
+        ]);
+
+        $matches = (new MatchProvidersToRequirement(new Entitlements))($requirement)->keyBy(fn ($row) => $row['provider']->id);
+
+        $this->assertTrue($matches[$featured->id]['is_featured']);
+        $this->assertFalse($matches[$featuredElsewhere->id]['is_featured']);
+        $this->assertGreaterThan($matches[$featuredElsewhere->id]['score'], $matches[$featured->id]['score']);
     }
 }

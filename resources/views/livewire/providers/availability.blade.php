@@ -6,7 +6,7 @@
         Set how many bookings you can take on a date, or mark it as unavailable. Applies from today onward.
     </p>
 
-    <form wire:submit="addEntry" class="bg-white border border-line rounded-lg p-6 mb-6 space-y-4">
+    <form wire:submit="addEntry" class="bg-surface-raised border border-line rounded-lg p-6 mb-6 space-y-4">
         <div class="grid grid-cols-2 gap-3">
             <div>
                 <label class="block text-[14px] font-medium text-ink mb-1">Date <span class="text-amber-700">*</span></label>
@@ -37,7 +37,7 @@
         </button>
     </form>
 
-    <div class="bg-white border border-line rounded-lg p-6">
+    <div class="bg-surface-raised border border-line rounded-lg p-6">
         <h2 class="text-[18px] font-semibold text-ink mb-3">Upcoming</h2>
 
         @forelse ($entries as $entry)

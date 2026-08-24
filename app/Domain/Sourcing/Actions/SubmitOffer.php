@@ -3,6 +3,7 @@
 namespace App\Domain\Sourcing\Actions;
 
 use App\Domain\Attribution\Models\ProviderLead;
+use App\Domain\Billing\Entitlements;
 use App\Domain\Events\Models\Requirement;
 use App\Domain\Events\States\RequirementState\OffersReceived;
 use App\Domain\Notifications\Models\Notification;
@@ -11,6 +12,7 @@ use App\Domain\Sourcing\Models\Offer;
 use App\Domain\Sourcing\States\OfferState\Draft;
 use App\Domain\Sourcing\States\OfferState\Submitted;
 use App\Models\User;
+use RuntimeException;
 
 /**
  * One offer per (requirement, provider) — re-calling this while still in
@@ -22,6 +24,10 @@ use App\Models\User;
  */
 class SubmitOffer
 {
+    public function __construct(private Entitlements $entitlements)
+    {
+    }
+
     /**
      * @param  array<string, mixed>  $data
      */
@@ -33,6 +39,10 @@ class SubmitOffer
         ]);
 
         $wasDraft = ! $offer->exists || $offer->status->equals(Draft::class);
+
+        if ($wasDraft) {
+            $this->guardMonthlyLimit($provider);
+        }
 
         $offer->fill([
             'submitted_by_user_id' => $submittedBy->id,
@@ -90,5 +100,22 @@ class SubmitOffer
         }
 
         return $offer;
+    }
+
+    private function guardMonthlyLimit(Provider $provider): void
+    {
+        $limit = $this->entitlements->for($provider)['max_offers_per_month'] ?? null;
+
+        if ($limit === null) {
+            return;
+        }
+
+        $submittedThisMonth = Offer::where('provider_id', $provider->id)
+            ->whereBetween('submitted_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->count();
+
+        if ($submittedThisMonth >= $limit) {
+            throw new RuntimeException("You've reached your plan's limit of {$limit} offers this month. Upgrade your plan to submit more.");
+        }
     }
 }

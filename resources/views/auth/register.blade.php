@@ -1,5 +1,13 @@
 <x-layouts.guest title="Create your account">
-    <h1 class="text-[24px] font-semibold text-ink mb-6">Create your account</h1>
+    <h1 class="text-[24px] font-semibold text-ink mb-6">
+        @if (($intent ?? null) === 'organiser')
+            Create your account to plan your event
+        @elseif (($intent ?? null) === 'provider')
+            Create your account to start offering your services
+        @else
+            Create your account
+        @endif
+    </h1>
 
     <a href="{{ route('auth.google.redirect') }}"
        class="w-full flex items-center justify-center gap-2 border border-line rounded-sm px-4 py-2 text-sm font-medium text-ink hover:bg-surface transition mb-4">
@@ -26,27 +34,16 @@
 
         <div>
             <label for="email" class="block text-[14px] font-medium text-ink mb-1">Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
                    class="w-full border border-line rounded-sm px-3 py-2 text-[16px] text-ink focus:outline-none focus:ring-2 focus:ring-green-600">
             @error('email')
                 <p class="mt-1 text-[13px] text-amber-700">{{ $message }}</p>
             @enderror
         </div>
 
-        <div>
-            <label for="password" class="block text-[14px] font-medium text-ink mb-1">Password</label>
-            <input id="password" type="password" name="password" required
-                   class="w-full border border-line rounded-sm px-3 py-2 text-[16px] text-ink focus:outline-none focus:ring-2 focus:ring-green-600">
-            @error('password')
-                <p class="mt-1 text-[13px] text-amber-700">{{ $message }}</p>
-            @enderror
-        </div>
+        <x-password-field autocomplete="new-password" />
 
-        <div>
-            <label for="password_confirmation" class="block text-[14px] font-medium text-ink mb-1">Confirm password</label>
-            <input id="password_confirmation" type="password" name="password_confirmation" required
-                   class="w-full border border-line rounded-sm px-3 py-2 text-[16px] text-ink focus:outline-none focus:ring-2 focus:ring-green-600">
-        </div>
+        <x-password-field name="password_confirmation" label="Confirm password" autocomplete="new-password" />
 
         <button type="submit"
                 class="w-full bg-green-600 hover:bg-green-700 text-white rounded-sm px-4 py-2 text-[14px] font-medium transition">

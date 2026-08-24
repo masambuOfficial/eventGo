@@ -11,13 +11,13 @@ class ServiceCategorySeeder extends Seeder
     public function run(): void
     {
         DB::table('service_categories')->insert([
-            ['id' => 100, 'parent_id' => null, 'slug' => 'audio-entertainment', 'name' => 'Audio & Entertainment', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 1],
-            ['id' => 200, 'parent_id' => null, 'slug' => 'food-beverages', 'name' => 'Food & Beverages', 'unit_label' => null, 'requires_capacity' => true, 'sort_order' => 2],
-            ['id' => 300, 'parent_id' => null, 'slug' => 'venue-infrastructure', 'name' => 'Venue & Infrastructure', 'unit_label' => null, 'requires_capacity' => true, 'sort_order' => 3],
-            ['id' => 400, 'parent_id' => null, 'slug' => 'decoration', 'name' => 'Decoration & Experience', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 4],
-            ['id' => 500, 'parent_id' => null, 'slug' => 'media-technology', 'name' => 'Media & Technology', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 5],
-            ['id' => 600, 'parent_id' => null, 'slug' => 'guest-management', 'name' => 'Guest Management', 'unit_label' => null, 'requires_capacity' => true, 'sort_order' => 6],
-            ['id' => 700, 'parent_id' => null, 'slug' => 'logistics', 'name' => 'Logistics', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 7],
+            ['id' => 100, 'parent_id' => null, 'slug' => 'audio-entertainment', 'name' => 'Audio & Entertainment', 'icon' => 'volume-high', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 1],
+            ['id' => 200, 'parent_id' => null, 'slug' => 'food-beverages', 'name' => 'Food & Beverages', 'icon' => 'utensils', 'unit_label' => null, 'requires_capacity' => true, 'sort_order' => 2],
+            ['id' => 300, 'parent_id' => null, 'slug' => 'venue-infrastructure', 'name' => 'Venue & Infrastructure', 'icon' => 'building-columns', 'unit_label' => null, 'requires_capacity' => true, 'sort_order' => 3],
+            ['id' => 400, 'parent_id' => null, 'slug' => 'decoration', 'name' => 'Decoration & Experience', 'icon' => 'palette', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 4],
+            ['id' => 500, 'parent_id' => null, 'slug' => 'media-technology', 'name' => 'Media & Technology', 'icon' => 'camera', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 5],
+            ['id' => 600, 'parent_id' => null, 'slug' => 'guest-management', 'name' => 'Guest Management', 'icon' => 'users', 'unit_label' => null, 'requires_capacity' => true, 'sort_order' => 6],
+            ['id' => 700, 'parent_id' => null, 'slug' => 'logistics', 'name' => 'Logistics', 'icon' => 'truck', 'unit_label' => null, 'requires_capacity' => false, 'sort_order' => 7],
         ]);
 
         DB::table('service_categories')->insert([

@@ -2,14 +2,13 @@
 
 namespace App\Domain\Events\Actions;
 
+use App\Domain\Catalog\Actions\BuildRequirementExpressionLanguage;
+use App\Domain\Catalog\Actions\BuildScopeVariableBag;
 use App\Domain\Catalog\Models\RequirementTemplate;
-use App\Domain\Catalog\Models\ScopeQuestion;
 use App\Domain\Events\Models\Event;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\ExpressionLanguage\ExpressionFunction;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * Turns scope answers into a suggested, editable requirements list. Never
@@ -18,13 +17,19 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 class GenerateRequirements
 {
+    public function __construct(
+        private BuildScopeVariableBag $buildVariableBag,
+        private BuildRequirementExpressionLanguage $buildExpressionLanguage,
+    ) {
+    }
+
     /**
      * @return Collection<int, array<string, mixed>>
      */
     public function __invoke(Event $event): Collection
     {
-        $variables = $this->buildVariableBag($event);
-        $language = $this->buildExpressionLanguage();
+        $variables = $this->variablesFor($event);
+        $language = ($this->buildExpressionLanguage)();
 
         return RequirementTemplate::with('category')
             ->where('event_type_id', $event->event_type_id)
@@ -81,22 +86,14 @@ class GenerateRequirements
     }
 
     /**
+     * Default-typed bag from BuildScopeVariableBag, overlaid with this
+     * event's real answers.
+     *
      * @return array<string, mixed>
      */
-    private function buildVariableBag(Event $event): array
+    private function variablesFor(Event $event): array
     {
-        $questions = ScopeQuestion::where('event_type_id', $event->event_type_id)->get();
-
-        $variables = [];
-
-        foreach ($questions as $question) {
-            $variables[$question->key] = match ($question->input_type) {
-                'number' => 0,
-                'bool' => false,
-                'multiselect' => [],
-                default => '',
-            };
-        }
+        $variables = ($this->buildVariableBag)($event->event_type_id);
 
         $answers = DB::table('event_scope_answers')
             ->join('scope_questions', 'scope_questions.id', '=', 'event_scope_answers.scope_question_id')
@@ -108,16 +105,5 @@ class GenerateRequirements
         }
 
         return $variables;
-    }
-
-    private function buildExpressionLanguage(): ExpressionLanguage
-    {
-        $language = new ExpressionLanguage();
-
-        foreach (['ceil', 'floor', 'round', 'min', 'max'] as $function) {
-            $language->addFunction(ExpressionFunction::fromPhp($function));
-        }
-
-        return $language;
     }
 }
